@@ -133,7 +133,7 @@ func appendPoints(points []client.Point, counters []Counters, i int) {
 	for ii := range MetricFields {
 		fieldName := MetricFields[ii]
 		cVal := reflect.Indirect(instVal).FieldByName(fieldName).Int()
-		log.Debug("CREATE POINT #%d, counter: %s source:%s ifindex:%d: value:%d", i*len(MetricFields)+ii, fieldName, inst.Source, inst.IfIndex, cVal)
+		log.Debug("CREATE POINT #%d, counter: %s source:%s ifindex:%d: value:%d, time:%s", i*len(MetricFields)+ii, fieldName, inst.Source, inst.IfIndex, cVal, inst.TimeStamp)
 		points[i*len(MetricFields)+ii] = client.Point{
 			Measurement: fieldName,
 			Tags: map[string]string{
@@ -143,8 +143,7 @@ func appendPoints(points []client.Point, counters []Counters, i int) {
 			Fields: map[string]interface{}{
 				"value": cVal,
 			},
-			Time:      inst.TimeStamp,
-			Precision: "s",
+			Time: inst.TimeStamp,
 		}
 	}
 }
